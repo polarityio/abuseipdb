@@ -16,7 +16,7 @@ ApiKey needed to access the AbuseIPDB Api.
 ### AbuseIPDB Max Age
 Max age in days to search AbuseIPDB.
 
-> Please note this muse be in day format ranging from 0-365.
+> Please note this must be in day format ranging from 0-365.
 
 ### Minimum Confidence Score
 Minimum score you want to be notified of from AbuseIPDB.
