@@ -59,10 +59,10 @@ function doLookup(entities, options, cb) {
             };
           } else if (res.statusCode === 429) {
             // reached rate limit
-            error = 'Reached API Lookup Limit';
+            error = { detail: 'Reached API Lookup Limit' };
           } else if (res.statusCode === 422) {
-            // days excedded bounds
-            error = 'The max age in days must be between 1 and 365.';
+            // days exceeded bounds
+            error = { detail: 'The max age in days must be between 1 and 365.' };
           } else {
             // Non 200 status code
             done({
