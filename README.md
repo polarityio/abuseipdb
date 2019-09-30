@@ -1,25 +1,27 @@
 # Polarity AbuseIPDB Integration
 
-The Polarity - AbuseIPDB Integration supports enrichment of IP addresses in ipv4 and ipv6 format. Enabling you to obtain AubuseIPDB information in real time.
+The Polarity - AbuseIPDB Integration supports enrichment of IP addresses in ipv4 and ipv6 format.
 
 Check out the integration below:
 
-![](https://user-images.githubusercontent.com/22529325/65832590-bff3b300-e293-11e9-907b-5036e63a613f.png)
+![](images/overlay.png)
 
 To learn more about AbuseIPDB, please visit: [official website](https://www.abuseipdb.com)
 
 ## AbuseIPDB Integration Options
 
-### AbuseIPDB ApiKey
+### API Key
 ApiKey needed to access the AbuseIPDB Api.
 
-### AbuseIPDB Max Age
+### Max Age in Days
 Max age in days to search AbuseIPDB.
 
-> Please note this must be in day format ranging from 0-365.
+> Please note this must be in day format ranging from 1-365.
 
-### Minimum Confidence Score
+### Minimum Abuse Confidence Score
 Minimum score you want to be notified of from AbuseIPDB.
+
+> Please note the score value must be between 0 and 100.
 
 ## Installation Instructions
 
