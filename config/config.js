@@ -90,8 +90,8 @@ module.exports = {
       key: 'maxAge',
       name: 'Max Age in Days',
       description: 'Maximum Number of Days to Search',
-      default: '30',
-      type: 'text',
+      default: 30,
+      type: 'number',
       userCanEdit: true,
       adminOnly: false
     },
@@ -99,8 +99,8 @@ module.exports = {
       key: 'minScore',
       name: 'Minimum Abuse Confidence Score',
       description: 'Minimum Abuse Confidence Score to be notified on, values range from 0-100',
-      default: '10',
-      type: 'text',
+      default: 10,
+      type: 'number',
       userCanEdit: true,
       adminOnly: false
     }
