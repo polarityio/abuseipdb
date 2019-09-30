@@ -180,6 +180,21 @@ function validateOptions(userOptions, cb) {
       message: 'You must provide a valid AbuseIPDB API key'
     });
   }
+
+  if (userOptions.minScore.value < 0 || userOptions.minScore.value > 100) {
+    errors.push({
+      key: 'minScore',
+      message: 'The Minimum Abuse Confidence Score must be between 0 and 100'
+    });
+  }
+
+  if (userOptions.maxAge.value < 1 || userOptions.maxAge.value > 365) {
+    errors.push({
+      key: 'maxAge',
+      message: 'The Max Age in Days must be between 1 and 365'
+    });
+  }
+
   cb(null, errors);
 }
 

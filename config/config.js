@@ -89,7 +89,7 @@ module.exports = {
     {
       key: 'maxAge',
       name: 'Max Age in Days',
-      description: 'Maximum Number of Days to Search',
+      description: 'Maximum Number of Days to Search (must be between 1 and 365 days)',
       default: 30,
       type: 'number',
       userCanEdit: true,
