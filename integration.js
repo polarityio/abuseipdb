@@ -97,7 +97,7 @@ function doLookup(entities, options, cb) {
         lookupResults.push({
           entity: result.entity,
           data: {
-            summary: [],
+            summary: _generateTags(result.body.data),
             details: result.body
           }
         });
@@ -110,10 +110,34 @@ function doLookup(entities, options, cb) {
   });
 }
 
+function _generateTags(result) {
+  let tags = [];
+
+  if (result.isWhitelisted === true) {
+    tags.push('Is Whitelisted');
+  }
+  if (typeof result.abuseConfidenceScore !== 'undefined') {
+    tags.push(`Abuse Confidence Score: ${result.abuseConfidenceScore}`);
+  }
+  if (typeof result.domain !== 'undefined') {
+    tags.push(`Associated Domain: ${result.domain}`);
+  }
+  if (typeof result.totalReports !== 'undefined' && typeof result.numDistinctUsers !== 'undefined') {
+    tags.push(`${result.totalReports} reports from ${result.numDistinctUsers} distinct users`);
+  }
+
+  return tags;
+}
+
 function _isMiss(body) {
   if (body && Array.isArray(body) && body.length === 0) {
     return true;
   }
+
+  if (!body.data) {
+    return true;
+  }
+
   return false;
 }
 
