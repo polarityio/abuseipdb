@@ -25,6 +25,7 @@ module.exports = {
   description:
     'AbuseIPDB is a project dedicated to helping combat the spread of hackers, spammers, and abusive activity on the internet.',
   entityTypes: ['ipv4', 'ipv6'],
+  defaultColor: "light-gray",
   /**
    * An array of style files (css or less) er will be included for your integration. Any styles specified in
    * the below files can be used in your custom template.
