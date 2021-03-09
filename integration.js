@@ -113,7 +113,7 @@ function doLookup(entities, options, cb) {
 function _generateTags(result) {
   let tags = [];
 
-  if (result.isAllowlisted === true) {
+  if (result.isWhitelisted === true) {
     tags.push('Is Allowlisted');
   }
   if (typeof result.abuseConfidenceScore !== 'undefined') {
