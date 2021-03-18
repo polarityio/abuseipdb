@@ -114,7 +114,7 @@ function _generateTags(result) {
   let tags = [];
 
   if (result.isWhitelisted === true) {
-    tags.push('Is Whitelisted');
+    tags.push('Is Allowlisted');
   }
   if (typeof result.abuseConfidenceScore !== 'undefined') {
     tags.push(`Abuse Confidence Score: ${result.abuseConfidenceScore}`);
@@ -164,6 +164,10 @@ function startup(logger) {
 
   if (typeof config.request.proxy === 'string' && config.request.proxy.length > 0) {
     defaults.proxy = config.request.proxy;
+  }
+
+  if (typeof config.request.rejectUnauthorized === 'boolean') {
+    defaults.rejectUnauthorized = config.request.rejectUnauthorized;
   }
 
   requestDefault = request.defaults(defaults);

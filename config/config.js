@@ -25,6 +25,7 @@ module.exports = {
   description:
     'AbuseIPDB is a project dedicated to helping combat the spread of hackers, spammers, and abusive activity on the internet.',
   entityTypes: ['ipv4', 'ipv6'],
+  defaultColor: "light-gray",
   /**
    * An array of style files (css or less) er will be included for your integration. Any styles specified in
    * the below files can be used in your custom template.
@@ -64,7 +65,9 @@ module.exports = {
     ca: '',
     // An HTTP proxy to be used. Supports proxy Auth with Basic Auth, identical to support for
     // the url parameter (by embedding the auth info in the uri)
-    proxy: ''
+    proxy: '',
+    
+    rejectUnauthorized: true
   },
   logging: {
     level: 'info' //trace, debug, info, warn, error, fatal
