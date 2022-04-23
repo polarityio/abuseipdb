@@ -1,68 +1,93 @@
 <div>
-  <a class="p-link" href="https://www.abuseipdb.com/check/{{details.ipAddress}}">View in AbuseIPDB {{fa-icon "external-link-square" class="external-link"}}</a>
+  <a class="p-link" href="https://www.abuseipdb.com/check/{{data.ipAddress}}">View in AbuseIPDB {{fa-icon "external-link-square" class="external-link"}}</a>
 </div>
-{{#if details}}
+{{#if data}}
+  <h1 class="p-title">
+    {{fa-icon "clipboard" fixedWidth=true}}  Summary
+  </h1>
+  <span>
+      The IP {{block.entity.value}} has been reported {{data.totalReports}} times by {{data.numDistinctUsers}} distinct sources and was last reported {{moment-from-now data.lastReportedAt timeZone=timezone}}.
+      AbuseIPDB is <strong>{{data.abuseConfidenceScore}}%</strong> confident the IP is malicious.
+  </span>
+
   <h1 class="p-title">
       {{fa-icon "info" fixedWidth=true}}  Enrichment Details
   </h1>
-  {{#if details.isWhitelisted}}
+  {{#if data.isWhitelisted}}
     <div>
       <span class="p-key">Is AllowListed?</span>
-      <span class="p-value">{{details.isWhitelisted}}</span>
+      <span class="p-value">{{data.isWhitelisted}}</span>
     </div>
   {{/if}}
-  {{#if details.abuseConfidenceScore}}
+  {{#if data.abuseConfidenceScore}}
     <div>
-      <span class="p-key">Abuse Confidence Score:</span>
-      <span class="p-value">{{details.abuseConfidenceScore}}</span>
+      <span class="p-key">Confidence of Abuse:</span>
+      <span class="p-value">{{data.abuseConfidenceScore}}%</span>
     </div>
   {{/if}}
-  {{#if details.countryName}}
+  {{#if data.countryName}}
     <div>
       <span class="p-key">Country of Origin:</span>
-      <span class="p-value">{{details.countryName}}</span>
+      <span class="p-value">{{data.countryName}}</span>
     </div>
   {{/if}}
-  {{#if details.usageType}}
+  {{#if data.usageType}}
     <div>
       <span class="p-key">Usage Type:</span>
-      <span class="p-value">{{details.usageType}}</span>
+      <span class="p-value">{{data.usageType}}</span>
     </div>
   {{/if}}
-  {{#if details.isp}}
+  {{#if data.isp}}
     <div>
       <span class="p-key">ISP:</span>
-      <span class="p-value">{{details.isp}}</span>
+      <span class="p-value">{{data.isp}}</span>
     </div>
   {{/if}}
-  {{#if details.domain}}
+  {{#if data.domain}}
     <div>
       <span class="p-key">Domain:</span>
-      <span class="p-value">{{details.domain}}</span>
+      <span class="p-value">{{data.domain}}</span>
     </div>
   {{/if}}
-  {{#if details.countryName}}
+  {{#if data.countryName}}
     <div>
       <span class="p-key">Country:</span>
-      <span class="p-value">{{details.countryName}}</span>
+      <span class="p-value">{{data.countryName}}</span>
     </div>
   {{/if}}
-  {{#if details.totalReports}}
+  {{#if data.totalReports}}
     <div>
-      <span class="p-key">Report Count:</span>
-      <span class="p-value">{{details.totalReports}}</span>
+      <span class="p-key">Number of Reports:</span>
+      <span class="p-value">{{data.totalReports}}</span>
     </div>
   {{/if}}
-  {{#if details.numDistinctUsers}}
+  {{#if data.numDistinctUsers}}
     <div>
       <span class="p-key">Distinct User Count:</span>
-      <span class="p-value">{{details.numDistinctUsers}}</span>
+      <span class="p-value">{{data.numDistinctUsers}}</span>
     </div>
   {{/if}}
-  {{#if details.lastReportedAt}}
+  {{#if data.lastReportedAt}}
     <div>
       <span class="p-key">Date Last Reported:</span>
-      <span class="p-value">{{details.lastReportedAt}}</span>
+      <span class="p-value">{{data.lastReportedAt}}</span>
     </div>
   {{/if}}
+  <h1 class="p-title">
+      {{fa-icon icon="boxes" fixedWidth=true}}  Categories
+  </h1>
+    {{#each categories as | category |}}
+        <span class="category-pill">
+            <span class="category">
+                {{category.name}}
+            </span>
+            <span class="category-count">
+                {{category.count}}
+            </span>
+        </span>
+    {{/each}}
+
+    <div class="mt-2">
+        <span class="p-footnote">Daily API Limit: {{quota.remaining}} / {{quota.limit}}</span>
+    </div>
 {{/if}}

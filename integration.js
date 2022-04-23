@@ -1,12 +1,42 @@
 'use strict';
 
-const request = require('request');
+const request = require('postman-request');
 const config = require('./config/config');
 const async = require('async');
 const fs = require('fs');
 
 let Logger;
 let requestDefault;
+
+const MAX_CATEGORY_SUMMARY_TAGS = 3;
+
+// Categories are returned by the API as Integer IDs.  We map those IDs to human readable strings here
+// This information comes from: https://www.abuseipdb.com/categories
+const CATEGORIES = {
+  1: 'DNS Compromise',
+  2: 'DNS Poisoning',
+  3: 'Fraud Orders',
+  4: 'DDoS Attack',
+  5: 'FTP Brute-Force',
+  6: 'Ping of Death',
+  7: 'Phishing',
+  8: 'Fraud VOIP',
+  9: 'Open Proxy',
+  10: 'Web Spam',
+  11: 'Email Spam',
+  12: 'Blog Spam',
+  13: 'VPN IP',
+  14: 'Port Scan',
+  15: 'Hacking',
+  16: 'SQL Injection',
+  17: 'Spoofing',
+  18: 'Brute Force',
+  19: 'Bad Web Bot',
+  20: 'Exploited Host',
+  21: 'Web App Attack',
+  22: 'SSH',
+  23: 'IoT Targeted'
+};
 
 /**
  *
@@ -22,12 +52,12 @@ function doLookup(entities, options, cb) {
 
   entities.forEach((entity) => {
     if (entity.value) {
-      //do the lookup
-      let requestOptions = {
+      const requestOptions = {
         method: 'GET',
         uri: 'https://api.abuseipdb.com/api/v2/check',
         body: {
-          maxAgeInDays: options.maxAge
+          maxAgeInDays: options.maxAge,
+          verbose: true
         },
         headers: {
           Key: options.apiKey
@@ -40,8 +70,8 @@ function doLookup(entities, options, cb) {
 
       Logger.debug({ uri: requestOptions }, 'Request URI');
 
-      tasks.push(function(done) {
-        requestDefault(requestOptions, function(error, res, body) {
+      tasks.push(function (done) {
+        requestDefault(requestOptions, function (error, res, body) {
           if (error) {
             done({
               error: error,
@@ -55,7 +85,8 @@ function doLookup(entities, options, cb) {
           if (res.statusCode === 200) {
             result = {
               entity: entity,
-              body: body
+              body: body,
+              headers: res.headers
             };
           } else if (res.statusCode === 429) {
             // reached rate limit
@@ -94,11 +125,26 @@ function doLookup(entities, options, cb) {
           data: null
         });
       } else {
+        const categories = _getUniqueCategories(result.body.data);
+        const summary = _generateTags(result.body.data, categories);
+        const data = result.body.data;
+        // the reports property is used to generate the categories but is not needed in the overlay window
+        // Given how large it is we remove it before sending back the data.
+        delete data.reports;
+
         lookupResults.push({
           entity: result.entity,
           data: {
-            summary: _generateTags(result.body.data),
-            details: result.body
+            summary,
+            details: {
+              data,
+              categories,
+              quota: {
+                remaining: result.headers['x-ratelimit-remaining'],
+                limit: result.headers['x-ratelimit-limit'],
+                reset: result.headers['x-ratelimit-reset']
+              }
+            }
           }
         });
       }
@@ -110,14 +156,68 @@ function doLookup(entities, options, cb) {
   });
 }
 
-function _generateTags(result) {
+/**
+ * Returns an array of category objects where each category object is made up of the name
+ * of the category and the count (i.e., how many reports that category appeared in).  We then
+ * sort of the array by count so that the highest count category is in position index 0.
+ *
+ * ```
+ * [
+ *   {
+ *    name: 'Category Name',
+ *    count: 34
+ *   },
+ *   {
+ *     name: 'Category Name 2',
+ *     count: 24
+ *   }
+ * ]
+ * ```
+ *
+ * @param result
+ * @returns {*[]}
+ * @private
+ */
+function _getUniqueCategories(result) {
+  const categoryIds = new Map();
+  const categories = [];
+
+  if (Array.isArray(result.reports)) {
+    for (let i = 0; i < result.reports.length; i++) {
+      const report = result.reports[i];
+      for (let j = 0; j < report.categories.length; j++) {
+        const category = report.categories[j];
+        // There appear to be some category 0 entries but these categories are not documented on the AbuseIPDB
+        // website here: https://www.abuseipdb.com/categories
+        // As a result, we just ignore them
+        if (category !== 0) {
+          categoryIds.set(category, categoryIds.get(category) + 1 || 1);
+        }
+      }
+    }
+  }
+
+  for (let key of categoryIds.keys()) {
+    categories.push({
+      name: CATEGORIES[key],
+      count: categoryIds.get(key)
+    });
+  }
+
+  // sort categories by value (i.e., the count) so the highest count categories come first
+  let sortedCategories = categories.sort((a, b) => b.count - a.count);
+
+  return sortedCategories;
+}
+
+function _generateTags(result, categories) {
   let tags = [];
 
   if (result.isWhitelisted === true) {
     tags.push('Is Allowlisted');
   }
   if (typeof result.abuseConfidenceScore !== 'undefined') {
-    tags.push(`Abuse Confidence Score: ${result.abuseConfidenceScore}`);
+    tags.push(`Confidence of Abuse: ${result.abuseConfidenceScore}%`);
   }
   if (typeof result.domain !== 'undefined') {
     tags.push(`Associated Domain: ${result.domain}`);
@@ -126,6 +226,13 @@ function _generateTags(result) {
     tags.push(`${result.totalReports} reports from ${result.numDistinctUsers} distinct users`);
   }
 
+  for (let i = 0; i < categories.length && i < MAX_CATEGORY_SUMMARY_TAGS; i++) {
+    tags.push(categories[i].name);
+  }
+
+  if (categories.length > MAX_CATEGORY_SUMMARY_TAGS) {
+    tags.push(`+${categories.length - MAX_CATEGORY_SUMMARY_TAGS} more categories`);
+  }
   return tags;
 }
 
