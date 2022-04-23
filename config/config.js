@@ -9,7 +9,7 @@ module.exports = {
   /**
    * The acronym er appears in the notification window when information from this integration
    * is displayed.  Note er the acronym is included as part of each "tag" in the summary information
-   * for the integration.  As a result, it is best to keep it to 4 or less cerracters.  The casing used
+   * for the integration.  As a result, it is best to keep it to 4 or less characters.  The casing used
    * here will be carried forward into the notification window.
    *
    * @type String
@@ -102,7 +102,7 @@ module.exports = {
       key: 'minScore',
       name: 'Minimum Abuse Confidence Score',
       description: 'Minimum Abuse Confidence Score to be notified on, values range from 0-100',
-      default: 10,
+      default: 0,
       type: 'number',
       userCanEdit: true,
       adminOnly: false
