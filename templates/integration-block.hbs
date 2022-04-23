@@ -70,7 +70,7 @@
   {{#if data.lastReportedAt}}
     <div>
       <span class="p-key">Date Last Reported:</span>
-      <span class="p-value">{{data.lastReportedAt}}</span>
+      <span class="p-value">{{moment-format data.lastReportedAt "YYYY-MM-DD HH:mm:ss z" timeZone=timezone}}</span>
     </div>
   {{/if}}
   <h1 class="p-title">
