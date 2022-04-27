@@ -119,7 +119,7 @@ function doLookup(entities, options, cb) {
     }
 
     results.forEach((result) => {
-      if (result.body === null || _isMiss(result.body) || result.body.data.abuseConfidenceScore <= options.minScore) {
+      if (result.body === null || _isMiss(result.body) || result.body.data.abuseConfidenceScore < options.minScore) {
         lookupResults.push({
           entity: result.entity,
           data: null
@@ -159,8 +159,9 @@ function doLookup(entities, options, cb) {
 /**
  * Returns an array of category objects where each category object is made up of the name
  * of the category and the count (i.e., how many reports that category appeared in).  We then
- * sort of the array by count so that the highest count category is in position index 0.
+ * sort the array by count so that the highest count category is in position index 0.
  *
+ * Example return payload:
  * ```
  * [
  *   {
@@ -182,12 +183,13 @@ function _getUniqueCategories(result) {
   const categoryIds = new Map();
   const categories = [];
 
+  // Compute counts for all categories and store in categoryIds
   if (Array.isArray(result.reports)) {
     for (let i = 0; i < result.reports.length; i++) {
       const report = result.reports[i];
       for (let j = 0; j < report.categories.length; j++) {
         const category = report.categories[j];
-        // There appear to be some category 0 entries but these categories are not documented on the AbuseIPDB
+        // There appear to be some categories with an ID of 0 but these categories are not documented on the AbuseIPDB
         // website here: https://www.abuseipdb.com/categories
         // As a result, we just ignore them
         if (category !== 0) {
@@ -197,6 +199,7 @@ function _getUniqueCategories(result) {
     }
   }
 
+  // Convert from category IDs to human readable names
   for (let key of categoryIds.keys()) {
     categories.push({
       name: CATEGORIES[key],
@@ -217,7 +220,14 @@ function _generateTags(result, categories) {
     tags.push('Is Allowlisted');
   }
   if (typeof result.abuseConfidenceScore !== 'undefined') {
-    tags.push(`Confidence of Abuse: ${result.abuseConfidenceScore}%`);
+    if (result.abuseConfidenceScore === 100) {
+      tags.push({
+        type: 'danger',
+        text: `Confidence of Abuse: ${result.abuseConfidenceScore}%`
+      });
+    } else {
+      tags.push(`Confidence of Abuse: ${result.abuseConfidenceScore}%`);
+    }
   }
   if (typeof result.domain !== 'undefined') {
     tags.push(`Associated Domain: ${result.domain}`);

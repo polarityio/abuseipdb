@@ -44,10 +44,18 @@ module.exports = {
    */
   block: {
     component: {
-      file: './components/integration-block.js'
+      file: './components/block.js'
     },
     template: {
-      file: './templates/integration-block.hbs'
+      file: './templates/block.hbs'
+    }
+  },
+  summary: {
+    component: {
+      file: './components/summary.js'
+    },
+    template: {
+      file: './templates/summary.hbs'
     }
   },
   request: {

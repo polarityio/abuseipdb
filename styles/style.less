@@ -1,3 +1,5 @@
+//@warning-color: #ff8f00;
+@warning-color: #FF4559;
 .external-link {
   font-size: 9px;
 }
@@ -26,5 +28,42 @@
     border-bottom: 1px solid gray;
     margin: 0px;
     background-color: #ddd;
+  }
+}
+
+.danger-summary-tag{
+  padding: 0 !important;
+
+  .icon-container{
+    background-color: #FF4559;
+    height: 100%;
+    padding: 3px 2px;
+    margin-bottom: 0px;
+    display: inline-block;
+
+    svg{
+      margin-bottom: 1px;
+    }
+  }
+
+  .tag {
+    padding: 0.25em 0em 0.25em 0em;
+    display: inline-block;
+  }
+
+  .data {
+    padding: 0.25em 0.4em 0.25em 0.25em;
+    display: inline-block;
+  }
+
+  .stripe-bg {
+    color: white;
+    background: repeating-linear-gradient(
+            45deg,
+            @warning-color,
+            @warning-color 5px,
+            lighten(@warning-color,5%) 5px,
+            lighten(@warning-color,5%) 10px
+    ) !important;
   }
 }
