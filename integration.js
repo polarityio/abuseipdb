@@ -126,7 +126,7 @@ function doLookup(entities, options, cb) {
         });
       } else {
         const categories = _getUniqueCategories(result.body.data);
-        const summary = _generateTags(result.body.data, categories);
+        const summary = _generateTags(result.body.data, categories, options);
         const data = result.body.data;
         // the reports property is used to generate the categories but is not needed in the overlay window
         // Given how large it is we remove it before sending back the data.
@@ -213,7 +213,7 @@ function _getUniqueCategories(result) {
   return sortedCategories;
 }
 
-function _generateTags(result, categories) {
+function _generateTags(result, categories, options) {
   let tags = [];
 
   if (typeof result.abuseConfidenceScore !== 'undefined') {
