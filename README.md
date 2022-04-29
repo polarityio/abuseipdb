@@ -5,9 +5,10 @@ The Polarity - AbuseIPDB Integration supports enrichment of IP addresses in ipv4
 Check out the integration below:
 
 
-| ![image](images/overlay.png) |![](images/overlay2.png)| 
+| ![image](images/overlay.png) |![](images/overlay2.png)
 |---|---|
 |*100% Abuse Confidence* |*0% Abuse Confidence|
+
 To learn more about AbuseIPDB, please visit: [official website](https://www.abuseipdb.com)
 
 ## AbuseIPDB Integration Options
