@@ -217,7 +217,7 @@ function _generateTags(result, categories, options) {
   let tags = [];
 
   if (typeof result.abuseConfidenceScore !== 'undefined') {
-    if (result.abuseConfidenceScore > options.baselineInvestigationThreshold && options.baselineInvestigationThreshold !== -1) {
+    if (result.abuseConfidenceScore >= options.baselineInvestigationThreshold && options.baselineInvestigationThreshold !== -1) {
       tags.push({
         type: 'danger',
         text: `Confidence of Abuse: ${result.abuseConfidenceScore}%`
