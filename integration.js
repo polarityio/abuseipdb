@@ -216,11 +216,8 @@ function _getUniqueCategories(result) {
 function _generateTags(result, categories) {
   let tags = [];
 
-  if (result.isWhitelisted === true) {
-    tags.push('Is Allowlisted');
-  }
   if (typeof result.abuseConfidenceScore !== 'undefined') {
-    if (result.abuseConfidenceScore === 100) {
+    if (result.abuseConfidenceScore > options.baselineInvestigationThreshold && options.baselineInvestigationThreshold !== -1) {
       tags.push({
         type: 'danger',
         text: `Confidence of Abuse: ${result.abuseConfidenceScore}%`
@@ -229,11 +226,18 @@ function _generateTags(result, categories) {
       tags.push(`Confidence of Abuse: ${result.abuseConfidenceScore}%`);
     }
   }
+  if (result.isWhitelisted === true) {
+    tags.push('Is Allowlisted');
+  }
   if (typeof result.domain !== 'undefined') {
     tags.push(`Associated Domain: ${result.domain}`);
   }
   if (typeof result.totalReports !== 'undefined' && typeof result.numDistinctUsers !== 'undefined') {
-    tags.push(`${result.totalReports} reports from ${result.numDistinctUsers} distinct users`);
+    if(result.totalReports > 0){
+      tags.push(`${result.totalReports} reports from ${result.numDistinctUsers} distinct users`);
+    } else {
+      tags.push('No reports');
+    }
   }
 
   for (let i = 0; i < categories.length && i < MAX_CATEGORY_SUMMARY_TAGS; i++) {
@@ -306,6 +310,13 @@ function validateOptions(userOptions, cb) {
     errors.push({
       key: 'minScore',
       message: 'The Minimum Abuse Confidence Score must be between 0 and 100'
+    });
+  }
+
+  if (userOptions.baselineInvestigationThreshold.value < -1 || userOptions.baselineInvestigationThreshold.value > 100) {
+    errors.push({
+      key: 'baselineInvestigationThreshold',
+      message: 'The Baseline Investigation Threshold must be between 0 and 100'
     });
   }
 

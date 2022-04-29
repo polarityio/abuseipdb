@@ -6,9 +6,14 @@
     {{fa-icon "clipboard" fixedWidth=true}}  Summary
   </h1>
   <span>
-      The IP {{block.entity.value}} has been reported {{data.totalReports}} times by {{data.numDistinctUsers}} distinct sources and was last reported {{moment-from-now data.lastReportedAt timeZone=timezone}}.
+    The IP {{block.entity.value}} has been reported {{data.totalReports}} times {{#if (gt data.totalReports 0)}}by {{data.numDistinctUsers}} distinct sources and was last reported <strong>{{moment-from-now data.lastReportedAt timeZone=timezone}}</strong>{{/if}}.
       AbuseIPDB is <strong>{{data.abuseConfidenceScore}}%</strong> confident the IP is malicious.
   </span>
+  {{#if data.isWhitelisted}}
+    <div class="mt-2">
+      {{block.entity.value}} is an IP address from within the AbuseIPDB allow list. Allow listed netblocks are typically owned by trusted entities. However, these same entities sometimes also provide cloud servers and mail services which are easily abused. Pay special attention when trusting or distrusting these IPs.
+    </div>
+  {{/if}}
 
   <h1 class="p-title">
       {{fa-icon "info" fixedWidth=true}}  Enrichment Details
@@ -57,14 +62,8 @@
   {{/if}}
   {{#if data.totalReports}}
     <div>
-      <span class="p-key">Number of Reports:</span>
-      <span class="p-value">{{data.totalReports}}</span>
-    </div>
-  {{/if}}
-  {{#if data.numDistinctUsers}}
-    <div>
-      <span class="p-key">Distinct User Count:</span>
-      <span class="p-value">{{data.numDistinctUsers}}</span>
+      <span class="p-key">Reports:</span>
+      <span class="p-value">{{data.totalReports}} reports from {{data.numDistinctUsers}} distinct users</span>
     </div>
   {{/if}}
   {{#if data.lastReportedAt}}
@@ -76,6 +75,7 @@
   <h1 class="p-title">
       {{fa-icon icon="boxes" fixedWidth=true}}  Categories
   </h1>
+  {{#if (gt categories.length 0)}}
     {{#each categories as | category |}}
         <span class="category-pill">
             <span class="category">
@@ -86,6 +86,9 @@
             </span>
         </span>
     {{/each}}
+  {{else}}
+    No categories reported
+  {{/if}}
 
     <div class="mt-2">
         <span class="p-footnote">Daily API Limit: {{quota.remaining}} / {{quota.limit}}</span>

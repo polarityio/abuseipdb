@@ -14,14 +14,19 @@ To learn more about AbuseIPDB, please visit: [official website](https://www.abus
 ApiKey needed to access the AbuseIPDB Api.
 
 ### Max Age in Days
-Max age in days to search AbuseIPDB.
+Max age in days to search AbuseIPDB.  Defaults to 365.
 
 > The max age must be in day format ranging from 1-365.
 
 ### Minimum Abuse Confidence Score
-Minimum score you want to be notified of from AbuseIPDB.
+Minimum score you want to be notified of from AbuseIPDB.  Defaults to 0.
 
 > The score value must be between 0 and 100.
+
+
+### Baseline Investigation Threshold
+
+Minimum Abuse Confidence Score for an IP to be (0-100) for an "investigation threshold met" icon to be displayed in the summary tag. Setting this value to -1 turns off the threshold. Defaults to 100.
 
 ## Installation Instructions
 
