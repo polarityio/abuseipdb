@@ -9,7 +9,7 @@ module.exports = {
   /**
    * The acronym er appears in the notification window when information from this integration
    * is displayed.  Note er the acronym is included as part of each "tag" in the summary information
-   * for the integration.  As a result, it is best to keep it to 4 or less cerracters.  The casing used
+   * for the integration.  As a result, it is best to keep it to 4 or less characters.  The casing used
    * here will be carried forward into the notification window.
    *
    * @type String
@@ -44,10 +44,18 @@ module.exports = {
    */
   block: {
     component: {
-      file: './components/integration-block.js'
+      file: './components/block.js'
     },
     template: {
-      file: './templates/integration-block.hbs'
+      file: './templates/block.hbs'
+    }
+  },
+  summary: {
+    component: {
+      file: './components/summary.js'
+    },
+    template: {
+      file: './templates/summary.hbs'
     }
   },
   request: {
@@ -92,20 +100,29 @@ module.exports = {
     {
       key: 'maxAge',
       name: 'Max Age in Days',
-      description: 'Maximum Number of Days to Search (must be between 1 and 365 days)',
-      default: 30,
+      description: 'Maximum Number of Days to Search (must be between 1 and 365 days).  Defaults to 365.',
+      default: 365,
       type: 'number',
-      userCanEdit: true,
-      adminOnly: false
+      userCanEdit: false,
+      adminOnly: true
     },
     {
       key: 'minScore',
       name: 'Minimum Abuse Confidence Score',
-      description: 'Minimum Abuse Confidence Score to be notified on, values range from 0-100',
-      default: 10,
+      description: 'Minimum Abuse Confidence Score to be notified on, values range from 0-100.  Defaults to 0.',
+      default: 0,
       type: 'number',
-      userCanEdit: true,
-      adminOnly: false
+      userCanEdit: false,
+      adminOnly: true
+    },
+    {
+      key: 'baselineInvestigationThreshold',
+      name: 'Baseline Investigation Threshold',
+      description: 'Minimum Abuse Confidence Score for an IP to be (0-100) for an "investigation threshold met" icon to be displayed in the summary tag.  Setting this value to -1 turns off the threshold. Defaults to 100.',
+      default: 100,
+      type: 'number',
+      userCanEdit: false,
+      adminOnly: true
     }
   ]
 };
