@@ -1,96 +1,126 @@
 <div>
-  <a class="p-link" href="https://www.abuseipdb.com/check/{{data.ipAddress}}">View in AbuseIPDB {{fa-icon "external-link-square" class="external-link"}}</a>
+  <a class="p-link" href="https://www.abuseipdb.com/check/{{data.ipAddress}}">View in AbuseIPDB
+    {{fa-icon "external-link-square" class="external-link"}}</a>
+</div>
+
+<div class="d-flex align-items-center justify-content-end copy-btn-container">
+  <button class="btn copy-btn p-action" {{action "copyData"}} title="Copy Information to Clipboard">
+    {{fa-icon icon="clipboard" fixedWidth=true}}
+  </button>
+  <div class="copy-success-message {{if showCopyMessage "visible" "hidden"}}">
+    {{fa-icon icon="check" fixedWidth=true class="copy-success-icon"}}
+    Copied Information.
+  </div>
 </div>
 {{#if data}}
-  <h1 class="p-title">
-    {{fa-icon "clipboard" fixedWidth=true}}  Summary
-  </h1>
-  <span>
-    The IP {{block.entity.value}} has been reported {{data.totalReports}} times {{#if (gt data.totalReports 0)}}by {{data.numDistinctUsers}} distinct sources and was last reported <strong>{{moment-from-now data.lastReportedAt timeZone=timezone}}</strong>{{/if}}.
-      AbuseIPDB is <strong>{{data.abuseConfidenceScore}}%</strong> confident the IP is malicious.
-  </span>
-  {{#if data.isWhitelisted}}
-    <div class="mt-2">
-      {{block.entity.value}} is an IP address from within the AbuseIPDB allow list. Allow listed netblocks are typically owned by trusted entities. However, these same entities sometimes also provide cloud servers and mail services which are easily abused. Pay special attention when trusting or distrusting these IPs.
-    </div>
-  {{/if}}
+  <div id={{concat "abuseipdb-container-" uniqueIdPrefix}}>
+    <h1 class="p-title">
+      {{fa-icon "clipboard" fixedWidth=true}}
+      Summary
+    </h1>
+    <span>
+      The IP
+      {{block.entity.value}}
+      has been reported
+      {{data.totalReports}}
+      times
+      {{#if (gt data.totalReports 0)}}by
+        {{data.numDistinctUsers}}
+        distinct sources and was last reported
+        <strong>{{moment-from-now data.lastReportedAt timeZone=timezone}}</strong>{{/if}}. AbuseIPDB is
+      <strong>{{data.abuseConfidenceScore}}%</strong>
+      confident the IP is malicious.
+    </span>
 
-  <h1 class="p-title">
-      {{fa-icon "info" fixedWidth=true}}  Enrichment Details
-  </h1>
-  {{#if data.isWhitelisted}}
-    <div>
-      <span class="p-key">Is AllowListed?</span>
-      <span class="p-value">{{data.isWhitelisted}}</span>
-    </div>
-  {{/if}}
-  {{#if data.abuseConfidenceScore}}
-    <div>
-      <span class="p-key">Confidence of Abuse:</span>
-      <span class="p-value">{{data.abuseConfidenceScore}}%</span>
-    </div>
-  {{/if}}
-  {{#if data.countryName}}
-    <div>
-      <span class="p-key">Country of Origin:</span>
-      <span class="p-value">{{data.countryName}}</span>
-    </div>
-  {{/if}}
-  {{#if data.usageType}}
-    <div>
-      <span class="p-key">Usage Type:</span>
-      <span class="p-value">{{data.usageType}}</span>
-    </div>
-  {{/if}}
-  {{#if data.isp}}
-    <div>
-      <span class="p-key">ISP:</span>
-      <span class="p-value">{{data.isp}}</span>
-    </div>
-  {{/if}}
-  {{#if data.domain}}
-    <div>
-      <span class="p-key">Domain:</span>
-      <span class="p-value">{{data.domain}}</span>
-    </div>
-  {{/if}}
-  {{#if data.countryName}}
-    <div>
-      <span class="p-key">Country:</span>
-      <span class="p-value">{{data.countryName}}</span>
-    </div>
-  {{/if}}
-  {{#if data.totalReports}}
-    <div>
-      <span class="p-key">Reports:</span>
-      <span class="p-value">{{data.totalReports}} reports from {{data.numDistinctUsers}} distinct users</span>
-    </div>
-  {{/if}}
-  {{#if data.lastReportedAt}}
-    <div>
-      <span class="p-key">Date Last Reported:</span>
-      <span class="p-value">{{moment-format data.lastReportedAt "YYYY-MM-DD HH:mm:ss z" timeZone=timezone}}</span>
-    </div>
-  {{/if}}
-  <h1 class="p-title">
-      {{fa-icon icon="boxes" fixedWidth=true}}  Categories
-  </h1>
-  {{#if (gt categories.length 0)}}
-    {{#each categories as | category |}}
+    {{#if data.isWhitelisted}}
+      <div class="mt-2">
+        {{block.entity.value}}
+        is an IP address from within the AbuseIPDB allow list. Allow listed netblocks are typically owned by trusted
+        entities. However, these same entities sometimes also provide cloud servers and mail services which are easily
+        abused. Pay special attention when trusting or distrusting these IPs.
+      </div>
+    {{/if}}
+
+    <h1 class="p-title">
+      {{fa-icon "info" fixedWidth=true}}
+      Enrichment Details
+    </h1>
+    {{#if data.isWhitelisted}}
+      <div>
+        <span class="p-key">Is AllowListed?</span>
+        <span class="p-value">{{data.isWhitelisted}}</span>
+      </div>
+    {{/if}}
+    {{#if data.abuseConfidenceScore}}
+      <div>
+        <span class="p-key">Confidence of Abuse:</span>
+        <span class="p-value">{{data.abuseConfidenceScore}}%</span>
+      </div>
+    {{/if}}
+    {{#if data.countryName}}
+      <div>
+        <span class="p-key">Country of Origin:</span>
+        <span class="p-value">{{data.countryName}}</span>
+      </div>
+    {{/if}}
+    {{#if data.usageType}}
+      <div>
+        <span class="p-key">Usage Type:</span>
+        <span class="p-value">{{data.usageType}}</span>
+      </div>
+    {{/if}}
+    {{#if data.isp}}
+      <div>
+        <span class="p-key">ISP:</span>
+        <span class="p-value">{{data.isp}}</span>
+      </div>
+    {{/if}}
+    {{#if data.domain}}
+      <div>
+        <span class="p-key">Domain:</span>
+        <span class="p-value">{{data.domain}}</span>
+      </div>
+    {{/if}}
+    {{#if data.countryName}}
+      <div>
+        <span class="p-key">Country:</span>
+        <span class="p-value">{{data.countryName}}</span>
+      </div>
+    {{/if}}
+    {{#if data.totalReports}}
+      <div>
+        <span class="p-key">Reports:</span>
+        <span class="p-value">{{data.totalReports}} reports from {{data.numDistinctUsers}} distinct users</span>
+      </div>
+    {{/if}}
+    {{#if data.lastReportedAt}}
+      <div>
+        <span class="p-key">Date Last Reported:</span>
+        <span class="p-value">{{moment-format data.lastReportedAt "YYYY-MM-DD HH:mm:ss z" timeZone=timezone}}</span>
+      </div>
+    {{/if}}
+    <h1 class="p-title">
+      {{fa-icon icon="boxes" fixedWidth=true}}
+      Categories
+    </h1>
+    {{#if (gt categories.length 0)}}
+      {{#each categories as |category|}}
         <span class="category-pill">
-            <span class="category">
-                {{category.name}}
-            </span>
-            <span class="category-count">
-                {{category.count}}
-            </span>
+          <span class="category">
+            {{category.name}}
+          </span>
+          <span class="category-count">
+            {{category.count}}
+          </span>
         </span>
-    {{/each}}
-  {{else}}
-    No categories reported
-  {{/if}}
+      {{/each}}
+
+    {{else}}
+      No categories reported
+    {{/if}}
 
     <div class="mt-2">
-        <span class="p-footnote">Daily API Limit: {{quota.remaining}} / {{quota.limit}}</span>
+      <span class="p-footnote">Daily API Limit: {{quota.remaining}} / {{quota.limit}}</span>
     </div>
+  </div>
 {{/if}}
