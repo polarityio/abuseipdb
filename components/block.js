@@ -36,11 +36,6 @@ polarity.export = PolarityComponent.extend({
     document.execCommand('copy');
     window.getSelection().removeAllRanges();
   },
-  getElementRance (element) {
-    let range = document.createRange();
-    range.selectNode(typeof element === 'string' ? document.getElementById(element) : element);
-    return range;
-  },
   restoreCopyState () {
     this.set('showCopyMessage', true);
 
