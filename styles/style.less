@@ -1,4 +1,4 @@
-@warning-color: #FF4559;
+@warning-color: #ff4559;
 .external-link {
   font-size: 9px;
 }
@@ -30,17 +30,17 @@
   }
 }
 
-.danger-summary-tag{
+.danger-summary-tag {
   padding: 0 !important;
 
-  .icon-container{
+  .icon-container {
     background-color: @warning-color;
     height: 100%;
     padding: 3px 2px;
     margin-bottom: 0px;
     display: inline-block;
 
-    svg{
+    svg {
       margin-bottom: 1px;
     }
   }
@@ -58,11 +58,54 @@
   .stripe-bg {
     color: white;
     background: repeating-linear-gradient(
-            45deg,
-            @warning-color,
-            @warning-color 5px,
-            lighten(@warning-color,5%) 5px,
-            lighten(@warning-color,5%) 10px
+      45deg,
+      @warning-color,
+      @warning-color 5px,
+      lighten(@warning-color, 5%) 5px,
+      lighten(@warning-color, 5%) 10px
     ) !important;
+  }
+}
+
+.copy-btn-container {
+  flex: 1 1 auto;
+  position: absolute;
+  right: 10px;
+  top: 7px;
+
+  .copy-btn {
+    font-size: 12px;
+    padding: 0px;
+    height: 20px;
+
+    :active {
+      color: darken(#388e3c, 5%);
+    }
+  }
+
+  .copy-success-message {
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    background-color: rgb(222, 226, 230);
+    min-width: max-content;
+    padding: 5px;
+    border-radius: 3px;
+
+    .copy-success-icon {
+      color: #aaa;
+    }
+
+    &.visible {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.25s linear;
+    }
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s 0.25s, opacity 0.25s linear;
+    }
   }
 }
