@@ -1,10 +1,10 @@
 {
   "name": "AbuseIPDB",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "main": "./integration.js",
   "private": true,
   "dependencies": {
-    "postman-request": "^2.88.1-postman.31",
-    "async": "^3.2.3"
+    "postman-request": "^2.88.1-postman.32",
+    "async": "^3.2.4"
   }
 }
