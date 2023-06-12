@@ -4,11 +4,13 @@ const request = require('postman-request');
 const config = require('./config/config');
 const async = require('async');
 const fs = require('fs');
+const { version: packageVersion } = require('./package.json');
 
 let Logger;
 let requestDefault;
 
 const MAX_CATEGORY_SUMMARY_TAGS = 3;
+const USER_AGENT = `abuseipdb-polarity-integration-v${packageVersion}`;
 
 // Categories are returned by the API as Integer IDs.  We map those IDs to human readable strings here
 // This information comes from: https://www.abuseipdb.com/categories
@@ -60,7 +62,8 @@ function doLookup(entities, options, cb) {
           verbose: true
         },
         headers: {
-          Key: options.apiKey
+          Key: options.apiKey,
+          'User-Agent': USER_AGENT
         },
         qs: {
           ipAddress: entity.value
@@ -217,7 +220,10 @@ function _generateTags(result, categories, options) {
   let tags = [];
 
   if (typeof result.abuseConfidenceScore !== 'undefined') {
-    if (result.abuseConfidenceScore >= options.baselineInvestigationThreshold && options.baselineInvestigationThreshold !== -1) {
+    if (
+      result.abuseConfidenceScore >= options.baselineInvestigationThreshold &&
+      options.baselineInvestigationThreshold !== -1
+    ) {
       tags.push({
         type: 'danger',
         text: `Confidence of Abuse: ${result.abuseConfidenceScore}%`
@@ -233,7 +239,7 @@ function _generateTags(result, categories, options) {
     tags.push(`Associated Domain: ${result.domain}`);
   }
   if (typeof result.totalReports !== 'undefined' && typeof result.numDistinctUsers !== 'undefined') {
-    if(result.totalReports > 0){
+    if (result.totalReports > 0) {
       tags.push(`${result.totalReports} reports from ${result.numDistinctUsers} distinct users`);
     } else {
       tags.push('No reports');
