@@ -24,7 +24,7 @@ module.exports = {
    */
   description:
     'AbuseIPDB is a project dedicated to helping combat the spread of hackers, spammers, and abusive activity on the internet.',
-  entityTypes: ['ipv4', 'ipv6'],
+  entityTypes: ['IPv4', 'IPv6'],
   defaultColor: "light-gray",
   /**
    * An array of style files (css or less) er will be included for your integration. Any styles specified in
@@ -118,8 +118,8 @@ module.exports = {
     {
       key: 'baselineInvestigationThreshold',
       name: 'Baseline Investigation Threshold',
-      description: 'Minimum Abuse Confidence Score for an IP to be (0-100) for an "investigation threshold met" icon to be displayed in the summary tag.  Setting this value to -1 turns off the threshold. Defaults to 100.',
-      default: 100,
+      description: 'Minimum Abuse Confidence Score for an IP to be (0-100) for an "investigation threshold met" icon to be displayed in the summary tag.  Setting this value to -1 turns off the threshold. Defaults to 75.',
+      default: 75,
       type: 'number',
       userCanEdit: false,
       adminOnly: true
