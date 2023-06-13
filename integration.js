@@ -9,7 +9,6 @@ const { version: packageVersion } = require('./package.json');
 let Logger;
 let requestDefault;
 
-const MAX_CATEGORY_SUMMARY_TAGS = 3;
 const USER_AGENT = `abuseipdb-polarity-integration-v${packageVersion}`;
 
 // Categories are returned by the API as Integer IDs.  We map those IDs to human readable strings here
@@ -129,7 +128,7 @@ function doLookup(entities, options, cb) {
         });
       } else {
         const categories = _getUniqueCategories(result.body.data);
-        const summary = _generateTags(result.body.data, categories, options);
+        const summary = _generateTags(result.body.data, options);
         const data = result.body.data;
         // the reports property is used to generate the categories but is not needed in the overlay window
         // Given how large it is we remove it before sending back the data.
@@ -216,7 +215,7 @@ function _getUniqueCategories(result) {
   return sortedCategories;
 }
 
-function _generateTags(result, categories, options) {
+function _generateTags(result, options) {
   let tags = [];
 
   if (typeof result.abuseConfidenceScore !== 'undefined') {
@@ -226,10 +225,10 @@ function _generateTags(result, categories, options) {
     ) {
       tags.push({
         type: 'danger',
-        text: `Confidence of Abuse: ${result.abuseConfidenceScore}%`
+        text: `Abuse Confidence Score: ${result.abuseConfidenceScore}%`
       });
     } else {
-      tags.push(`Confidence of Abuse: ${result.abuseConfidenceScore}%`);
+      tags.push(`Abuse Confidence Score: ${result.abuseConfidenceScore}%`);
     }
   }
   if (result.isWhitelisted === true) {
@@ -240,19 +239,12 @@ function _generateTags(result, categories, options) {
   }
   if (typeof result.totalReports !== 'undefined' && typeof result.numDistinctUsers !== 'undefined') {
     if (result.totalReports > 0) {
-      tags.push(`${result.totalReports} reports from ${result.numDistinctUsers} distinct users`);
+      tags.push(`${result.totalReports} reports from ${result.numDistinctUsers} users`);
     } else {
       tags.push('No reports');
     }
   }
 
-  for (let i = 0; i < categories.length && i < MAX_CATEGORY_SUMMARY_TAGS; i++) {
-    tags.push(categories[i].name);
-  }
-
-  if (categories.length > MAX_CATEGORY_SUMMARY_TAGS) {
-    tags.push(`+${categories.length - MAX_CATEGORY_SUMMARY_TAGS} more categories`);
-  }
   return tags;
 }
 
