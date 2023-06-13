@@ -52,7 +52,7 @@ function doLookup(entities, options, cb) {
   Logger.trace({ entities: entities }, 'entities');
 
   entities.forEach((entity) => {
-    if (entity.value) {
+    if ((entity.isIPv4 && isValidIpv4(entity)) || entity.isIPv6) {
       const requestOptions = {
         method: 'GET',
         uri: 'https://api.abuseipdb.com/api/v2/check',
@@ -247,6 +247,22 @@ function _generateTags(result, options) {
 
   return tags;
 }
+
+const isLoopBackIp = (entity) => {
+  return entity.startsWith('127');
+};
+
+const isLinkLocalAddress = (entity) => {
+  return entity.startsWith('169');
+};
+
+const isPrivateIP = (entity) => {
+  return entity.isPrivateIP === true;
+};
+
+const isValidIpv4 = (entity) => {
+  return !(isLoopBackIp(entity.value) || isLinkLocalAddress(entity.value) || isPrivateIP(entity));
+};
 
 function _isMiss(body) {
   if (body && Array.isArray(body) && body.length === 0) {
