@@ -1,0 +1,52 @@
+{
+  "data": {
+    "ipAddress": "118.25.6.39",
+    "isPublic": true,
+    "ipVersion": 4,
+    "isWhitelisted": false,
+    "abuseConfidenceScore": 100,
+    "countryCode": "CN",
+    "countryName": "China",
+    "usageType": "Data Center/Web Hosting/Transit",
+    "isp": "Tencent Cloud Computing (Beijing) Co. Ltd",
+    "domain": "tencent.com",
+    "hostnames": [],
+    "totalReports": 1234,
+    "numDistinctUsers": 89,
+    "lastReportedAt": "2024-01-15T14:32:10+00:00",
+    "isTor": false,
+    "abuseCategories": [
+      4,
+      14,
+      15,
+      18
+    ]
+  },
+  "categories": [
+    {
+      "name": "DDoS Attack",
+      "count": 456
+    },
+    {
+      "name": "Port Scan",
+      "count": 234
+    },
+    {
+      "name": "Hacking",
+      "count": 189
+    },
+    {
+      "name": "Brute Force",
+      "count": 145
+    },
+    {
+      "name": "SSH",
+      "count": 78
+    }
+  ],
+  "quota": {
+    "remaining": "980",
+    "limit": "1000",
+    "reset": "2024-01-16T00:00:00+00:00"
+  }
+}

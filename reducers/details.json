@@ -1,0 +1,32 @@
+{
+  "root": {
+    "path": "",
+    "on_null": "return_empty"
+  },
+  "pipeline": [
+    {
+      "op": "copy",
+      "from": "data",
+      "to": "reduced_results.data"
+    },
+    {
+      "op": "copy",
+      "from": "categories",
+      "to": "reduced_results.categories"
+    },
+    {
+      "op": "drop",
+      "paths": [
+        "reduced_results.data.countryCode"
+      ]
+    },
+    {
+      "op": "prune",
+      "strategy": "empty_values",
+      "target": "reduced_results"
+    }
+  ],
+  "output": {
+    "result": "$working.reduced_results"
+  }
+}
